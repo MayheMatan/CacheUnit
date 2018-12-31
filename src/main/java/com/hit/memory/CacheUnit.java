@@ -54,7 +54,7 @@ public class CacheUnit<T> extends java.lang.Object {
 		}
 	}
 
-	public void updateFile(DataModel<T> model) { // we didn't asked to implement update but we chose to do so in order to supply Cache unit controller
+	synchronized public void updateFile(DataModel<T> model) { // we didn't asked to implement update but we chose to do so in order to supply Cache unit controller
 		dao.save(model);
 	}
 }
