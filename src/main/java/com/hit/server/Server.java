@@ -34,7 +34,6 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 
 	@Override
 	public void run() {
-
 		try { // opening new connection
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
@@ -47,13 +46,11 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 				e1.printStackTrace();
 			}
 			try {
-
 				thread = new Thread(new HandleRequest<Request<String>>(socket, cacheUnitController));
 				threadPoolExecutor.submit(thread); // number of threads was incremented
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 			if (serverStatus.equals("off") && threadPoolExecutor.getActiveCount() == 0) {
 				try {
 					threadPoolExecutor.shutdown(); // turning off the socket and threadPool
@@ -68,9 +65,7 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 						e.printStackTrace();
 					}
 				}
-
 			}
-
 		}
 	}
 }

@@ -4,7 +4,11 @@ import java.io.Serializable;
 public class Request<T> extends java.lang.Object implements Serializable
 {
 
-    private java.util.Map<java.lang.String,java.lang.String> headers;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8553301636784820828L;
+	private java.util.Map<java.lang.String,java.lang.String> headers;
     private T body;
 
     public Request(java.util.Map<java.lang.String,java.lang.String> headers, T body)

@@ -23,20 +23,19 @@ import java.util.Scanner;
 public class HandleRequest<T> extends java.lang.Object implements Runnable
 {
 
-    Socket socket;
-    CacheUnitController<T> unitController;
-    Request<DataModel<T>[]> socketRequest;
-    ObjectInputStream input;
-    ObjectOutputStream output;
-    Gson gson;
-    Type ref;
+   private Socket socket;
+   private CacheUnitController<T> unitController;
+   private Request<DataModel<T>[]> socketRequest;
+   private ObjectInputStream input;
+   private ObjectOutputStream output;
+   private Gson gson;
+   private Type ref;
 
     //initialize request socket(from server class) and create a gson instance
 	public HandleRequest(java.net.Socket s, CacheUnitController<T> controller)
     {
         this.socket = s;
         this.unitController = controller;
-
         try
         {
         	Scanner reader = new Scanner(new InputStreamReader(socket.getInputStream()));
@@ -45,12 +44,8 @@ public class HandleRequest<T> extends java.lang.Object implements Runnable
         {
             e.printStackTrace ();
         }
-
         gson = new GsonBuilder().create();
-
     }
-
-
     @SuppressWarnings({ "rawtypes" })
 	@Override
     public void run() {

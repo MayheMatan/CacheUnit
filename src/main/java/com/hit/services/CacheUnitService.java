@@ -22,11 +22,8 @@ public class CacheUnitService<T> extends java.lang.Object
     {
         LRUAlgoCacheImpl<T, DataModel<T>> lru = new LRUAlgoCacheImpl<>(30);
         DaoFileImpl<T> daoFile = new DaoFileImpl<>("out.txt");
-
         this.cacheUnit = new CacheUnit(lru, daoFile);
-
-        for(int i = 0; i < 30; i++)
-        {
+        for(int i = 0; i < 30; i++) {
             Integer integer = i;
             daoFile.save(new DataModel(Long.valueOf(i), integer));
         }
@@ -39,16 +36,11 @@ public class CacheUnitService<T> extends java.lang.Object
 
         DataModel[] returnModels = null;
         Long[] ids = new Long[dataModels.length];
-
-        for (int i = 0; i <dataModels.length ; i++)
-        {
+        for (int i = 0; i <dataModels.length ; i++) {
             ids[i] = dataModels[i].getDataModelId();
         }
-
         returnModels = cacheUnit.getDataModels(ids);
-
-        for(DataModel<T> model: returnModels)
-        {
+        for(DataModel<T> model: returnModels) {
             model.setContent(null);
         }
         return true;
@@ -60,27 +52,19 @@ public class CacheUnitService<T> extends java.lang.Object
 
         DataModel[] returnModels = null;
         Long[] ids = new Long[dataModels.length];
-
-        for (int i = 0; i <dataModels.length ; i++)
-        {
+        for (int i = 0; i <dataModels.length ; i++) {
             ids[i] = dataModels[i].getDataModelId();
         }
-
         returnModels = cacheUnit.getDataModels(ids);
-
-        for(int i = 0; i <dataModels.length ; i++)
-        {
-            for(int j = 0; j <returnModels.length ; j++)
-            {
-                if(dataModels[i].getDataModelId ().equals (returnModels[j].getDataModelId ()))
-                {
+        for(int i = 0; i <dataModels.length ; i++) {
+            for(int j = 0; j <returnModels.length ; j++) {
+                if(dataModels[i].getDataModelId ().equals (returnModels[j].getDataModelId ())) {
                     returnModels[j].setContent (dataModels[i].getContent ());
                     j = returnModels.length+1;
                 }
             }
         }
-        for(DataModel model: dataModels)
-        {
+        for(DataModel model: dataModels) {
             cacheUnit.updateFile(model);
         }
         return true;
@@ -91,12 +75,9 @@ public class CacheUnitService<T> extends java.lang.Object
     {
         Long[] ids = new Long[dataModels.length];
         DataModel[] models = null;
-
-        for (int i = 0; i < dataModels.length; i++)
-        {
+        for (int i = 0; i < dataModels.length; i++) {
             ids[i] = dataModels[i].getDataModelId();
         }
-
         models = cacheUnit.getDataModels(ids);
         return models;
     }

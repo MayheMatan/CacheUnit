@@ -18,7 +18,7 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
     public DaoFileImpl(String filePath) throws FileNotFoundException, IOException
     {
     	this.filePath = filePath;
-    	this. hashtable = new Hashtable<> ();
+    	this.hashtable = new Hashtable<> ();
     	this.openInputStream();
     	this.openOutputStream();
     }
@@ -37,31 +37,24 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
         openInputStream ();
         hashtable.remove (entity.getDataModelId ());
         openOutputStream ();
-
     }
 
 	@Override
     public DataModel<T> find(Long id)
     {
         DataModel<T> resultModel = null;
-
         openInputStream ();
-
-        resultModel = hashtable.get (id);
-
+        resultModel = hashtable.get(id);
         openOutputStream ();
         closeStreams ();
-
         return resultModel;
     }
-
 
     @Override
     public void save(DataModel<T> entity)
     {
         openInputStream ();
         hashtable.put (entity.getDataModelId (),entity);
-
         openOutputStream ();
         closeStreams ();
     }
@@ -73,7 +66,6 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
         {
             this.inputStream = new ObjectInputStream (new FileInputStream (filePath));
             this.hashtable = (Hashtable<Long, DataModel<T>>)inputStream.readObject ();
-
         } catch (IOException e)
         {
             e.printStackTrace ();
@@ -81,8 +73,6 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
         {
             e.printStackTrace ();
         }
-
-
     }
 
     private void openOutputStream()
@@ -95,8 +85,6 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
         {
             e.printStackTrace ();
         }
-
-
     }
 
     private void closeStreams()
@@ -110,5 +98,4 @@ public class DaoFileImpl<T> implements IDao<java.lang.Long, DataModel<T>>
             e.printStackTrace ();
         }
     }
-
 }

@@ -39,13 +39,10 @@ public class DataModel <T> implements java.io.Serializable
 		if (!(obj instanceof DataModel<?>)) {
 			return false;
 		}
-
-		DataModel<?> otherModel = (DataModel<?>) obj;
-
+		DataModel<T> otherModel = (DataModel<T>) obj;
 		if (this.dataModelId != otherModel.dataModelId) {
 			return false;
 		}
-
 		return true;
 
 	}

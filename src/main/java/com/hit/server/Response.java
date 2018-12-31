@@ -1,11 +1,14 @@
 package com.hit.server;
-
 import java.io.Serializable;
 
 public class Response<T> implements Serializable
 {
 
-    private java.util.Map<java.lang.String,java.lang.String> headers;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2630554794510354418L;
+	private java.util.Map<java.lang.String,java.lang.String> headers;
     private T body;
 
     public Response(java.util.Map<java.lang.String,java.lang.String> headers, T body)

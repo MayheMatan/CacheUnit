@@ -1,32 +1,23 @@
 package com.hit.dm;
 
 import static org.junit.Assert.assertEquals;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-//import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Nested;
-
 import com.hit.dao.DaoFileImpl;
 import com.hit.dm.DataModel;
 import com.hit.memory.CacheUnit;
 import com.hit.algorithm.IAlgoCache;
 import com.hit.algorithm.LRUAlgoCacheImpl;
 
-//@Nested
-	//@DisplayName("Tests for Dao")
-
-	public class DaoFileTest{
+	public class DaoFileTest {
 	private static final int CAPACITY = 10;
 	public static IAlgoCache<Long, DataModel<Integer>> lru = new LRUAlgoCacheImpl<>(CAPACITY);
     public static DaoFileImpl<Integer> dao;{
     try{
-    	this.dao = new DaoFileImpl<>("DataSource.txt", CAPACITY * 2);
+    	DaoFileTest.dao = new DaoFileImpl<>("DataSource.txt", CAPACITY * 2);
     } catch (IOException e)
     {
         e.printStackTrace ();}}
@@ -62,7 +53,6 @@ import com.hit.algorithm.LRUAlgoCacheImpl;
 
 
 		@Test
-		//@DisplayName("Test for Dao")
 		public void testingDao() throws FileNotFoundException, IOException {
 			DaoFileImpl<Integer> dao = new DaoFileImpl<>("DataSource.txt", CAPACITY);
 			for (int i = 0; i < dataModels.length; i++) {
@@ -73,7 +63,6 @@ import com.hit.algorithm.LRUAlgoCacheImpl;
 		}
 
 		@Test
-		//@DisplayName("Test for Dao delete")
 		public void testingDaoDelete() {
 			for (int i = 0; i < dataModels.length; i++) {
 				dao.delete(dataModels[i]);

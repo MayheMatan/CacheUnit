@@ -63,7 +63,6 @@ public class CLI extends java.lang.Object implements Runnable {
 					try {
 						thread = new Thread((Runnable) new Server(34567));
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					thread.start();
