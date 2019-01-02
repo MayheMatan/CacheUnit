@@ -34,14 +34,12 @@ public class HandleRequest<T> extends java.lang.Object implements Runnable
 	@Override
 	public void run() {
 
-		Request<DataModel<T>[]> request = null;
-
 		try {
 			Scanner reader = new Scanner(new InputStreamReader(socket.getInputStream()));
 			PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 			String req = (String)reader.nextLine();
 		    Type ref = new TypeToken<Request<DataModel<T>[]>>() {}.getType();
-			request = new Gson().fromJson(req, ref);
+		    Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
 
 			String action = request.getHeaders().get(ACTION);
 			switch (action.toLowerCase()) {
