@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 import com.hit.server.Server;
 
-//our observable
 
 public class CLI extends java.lang.Object implements Runnable {
 
@@ -39,9 +38,7 @@ public class CLI extends java.lang.Object implements Runnable {
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
 		support.removePropertyChangeListener(pcl);
 	}
-
-	// Using this support, we can add and remove observers, and notify them when the
-	// state of the observable changes
+    // both methodes are implemented to notify other classes.
 
 	public void write(String string) {
 		System.out.println(builder.append(string));
@@ -52,11 +49,8 @@ public class CLI extends java.lang.Object implements Runnable {
 	public void run() {
 		while (true) {
 			write(ENTER_COMMAND);
-			// printWriter.println(ENTER_COMMAND);
 			String input = scanner.nextLine();
 			while (!input.equalsIgnoreCase("stop")) {
-				// printWriter.println (ENTER_COMMAND);
-				// input = scanner.nextLine ();
 				if (input.equals("start")) {
 					support.firePropertyChange(serverStatus,"off","on");
 					write(STARTING);
@@ -66,7 +60,6 @@ public class CLI extends java.lang.Object implements Runnable {
 						e.printStackTrace();
 					}
 					thread.start();
-
 				} else if (!input.equals("stop")) {
 					write(INVALID);
 				}

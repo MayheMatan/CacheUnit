@@ -12,7 +12,7 @@ import com.hit.services.CacheUnitController;
 
 public class Server extends java.lang.Object implements java.beans.PropertyChangeListener, java.lang.Runnable
 {
-	private static final int PORT = 34568;
+	private static final int PORT = 34567;
 	private static boolean SERVER_IS_RUNNING = true;
 	private static final int MAX_CLIENTS = 5;
 	private static String serverStatus = "on";
@@ -25,10 +25,9 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 	public Server(int port) throws FileNotFoundException, IOException {
 		cacheUnitController = new CacheUnitController<Request<String>>();
 		threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(MAX_CLIENTS);
-		// i'm using threadPool to let several clients to access the server
 	}
 
-	public void propertyChange(PropertyChangeEvent evt) { // to get updates , server is observing for changes from CLI
+	public void propertyChange(PropertyChangeEvent evt) { // updates observers from the cli
 		serverStatus = (String) evt.getNewValue();
 	}
 
@@ -47,16 +46,16 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 			}
 			try {
 				thread = new Thread(new HandleRequest<Request<String>>(socket, cacheUnitController));
-				threadPoolExecutor.submit(thread); // number of threads was incremented
+				threadPoolExecutor.submit(thread); // counts the number of Exectutors
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (serverStatus.equals("off") && threadPoolExecutor.getActiveCount() == 0) {
 				try {
-					threadPoolExecutor.shutdown(); // turning off the socket and threadPool
+					threadPoolExecutor.shutdown(); // shuting down server and the threadooling.
 				} catch (Exception e) {
 					e.printStackTrace();
-				} finally { // finally block to close the stream safely
+				} finally { // closing everything
 					try {
 						socket.close();
 						serverSocket.close();

@@ -23,13 +23,12 @@ public class CacheUnitService<T> extends java.lang.Object
         LRUAlgoCacheImpl<T, DataModel<T>> lru = new LRUAlgoCacheImpl<>(30);
         DaoFileImpl<T> daoFile = new DaoFileImpl<>("out.txt");
         this.cacheUnit = new CacheUnit(lru, daoFile);
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 30; i++) { // Only for first iteration  to create the file
             Integer integer = i;
             daoFile.save(new DataModel(Long.valueOf(i), integer));
         }
     }
 
-    //Implementation of actions methods
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean delete(com.hit.dm.DataModel<T>[] dataModels) throws ClassNotFoundException, IOException
     {

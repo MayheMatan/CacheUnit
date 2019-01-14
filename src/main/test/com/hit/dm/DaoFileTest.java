@@ -17,7 +17,7 @@ import com.hit.algorithm.LRUAlgoCacheImpl;
 	public static IAlgoCache<Long, DataModel<Integer>> lru = new LRUAlgoCacheImpl<>(CAPACITY);
     public static DaoFileImpl<Integer> dao;{
     try{
-    	DaoFileTest.dao = new DaoFileImpl<>("DataSource.txt", CAPACITY * 2);
+    	DaoFileTest.dao = new DaoFileImpl<>("out.txt", CAPACITY * 2);
     } catch (IOException e)
     {
         e.printStackTrace ();}}

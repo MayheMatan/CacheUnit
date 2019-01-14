@@ -1,79 +1,50 @@
 package com.hit.memory;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
 import java.io.IOException;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
 import com.hit.algorithm.IAlgoCache;
 import com.hit.algorithm.LRUAlgoCacheImpl;
 import com.hit.dao.DaoFileImpl;
+import com.hit.dao.IDao;
 import com.hit.dm.DataModel;
 
 public class CacheUnitTest {
 
-	private static final int CAPACITY = 10;
-	public static final IAlgoCache<Long, DataModel<Integer>> lru = new LRUAlgoCacheImpl<>(CAPACITY);
-    public static DaoFileImpl<Integer> dao;{
-    try{
-    	CacheUnitTest.dao = new DaoFileImpl<>("DataSource.txt", CAPACITY * 2);
-    } catch (IOException e)
-    {
-        e.printStackTrace ();}}
-	public static CacheUnit<Integer> cacheUnit = new CacheUnit(lru,dao);
-	public static Long[] ids = new Long[CAPACITY];
-	public static Integer[] nullArray = new Integer[CAPACITY];
-	public static DataModel<Integer>[] dataModels = new DataModel[CAPACITY];
-	public static DataModel<Integer> myModel = null;
-
-
 	@Test
-	@Before
-	public void setUpWithData() {
-		for (int i = 0; i < CAPACITY; i++) {
-			ids[i] = Long.valueOf(i);
-			myModel = new DataModel<Integer>(Long.valueOf(i), i);
-			dataModels[i] = myModel;
-			lru.putElement(Long.valueOf(i), myModel);
-			dao.save(myModel);
-			assertEquals("if inserted to the file it should find the current model",dataModels[i].getDataModelId(), dao.find(dataModels[i].getDataModelId()).getDataModelId());
-		}
-	}
+	public void cacheUnitTest() throws ClassNotFoundException, IOException {
+		IDao<Long, DataModel<String>> dao = new DaoFileImpl<>("out.txt");
+		IAlgoCache<Long, DataModel<String>> algo = new LRUAlgoCacheImpl<>(4);
 
-	@Test
-	@After
-	 public void afterAll() {
-		for (int i = 0; i < CAPACITY; i++) {
-			lru.removeElement(dataModels[i].getDataModelId());
-			dao.delete(dataModels[i]);
-			assertEquals("after we finished the test, we delete all models , if deleted successfully should return null",null, dao.find(dataModels[i].getDataModelId()));
+		CacheUnit<String> cacheUnit = new CacheUnit(algo, dao);
+		DataModel<String> datamodel1 = new DataModel<String>(1L, "a");
+		DataModel<String> datamodel2 = new DataModel<String>(2L, "b");
+		DataModel<String> datamodel3 = new DataModel<String>(3L, "c");
+		DataModel<String> datamodel4 = new DataModel<String>(4L, "d");
+		DataModel<String> datamodel5 = new DataModel<String>(5L, "e");
 
+
+		dao.save(datamodel1);
+		dao.save(datamodel2);
+		dao.save(datamodel3);
+		dao.save(datamodel4);
+		dao.save(datamodel5);
+		DataModel<String> temp=dao.find(2L);
+		System.out.println(temp.getDataModelId() + " " + temp.getContent());
+
+		Long[] ids = { 5L, 3L , 1L};
+        String[] answers= {"e","c","a"};
+        int i=0;
+        DataModel<String>[] resultArr = cacheUnit.getDataModels(ids);
+    
+
+		for (DataModel<String> item : resultArr) {
+			System.out.println(item.getDataModelId() + " " + item.getContent());
+			 assertEquals(item.getContent(), answers[i++]);
 		}
-	}
+		
 	
-
-	class TestingCacheUnit {
-
-		@Test
-		void InsertionTest() throws ClassNotFoundException, IOException {
-			cacheUnit.putDataModels(dataModels); // testing putDataModels method
-			DataModel<Integer>[] tempModels = new DataModel[CAPACITY];
-			tempModels = cacheUnit.getDataModels(ids);
-			for (int i = 0; i < tempModels.length; i++) {
-				assertEquals("if put and get dataModels are working it should return the same models",(Object)String.valueOf(tempModels[i]), 
-						(Object)String.valueOf(dataModels[i]));
-			}
-		}
-
-		class WhenModelsInsetred {
-
-			@Test
-			void deleteModelsTest() {
-				cacheUnit.removeDataModels(ids);
-				for (int i = 0; i < ids.length; i++) {
-					assertEquals("After we removed all models,getDataModels should return null",null, lru.getElement(ids[i]));
-				}
-			}
-		}
 	}
 }

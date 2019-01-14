@@ -1,8 +1,4 @@
 package com.hit.server;
-/*
- * Gets request(socket) from server, reads the json fields and passing the action
- * command to CacheUnitController to invoke the method base on the string.
- * */
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hit.dm.DataModel;
@@ -22,7 +18,6 @@ public class HandleRequest<T> extends java.lang.Object implements Runnable
 	private static final String GET = "get";
 	private static final String ACTION = "action";
 
-    //initialize request socket(from server class) and create a gson instance
 	private CacheUnitController<T> cacheUnitController;
 	private Socket socket;
 
@@ -42,6 +37,7 @@ public class HandleRequest<T> extends java.lang.Object implements Runnable
 		    Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
 
 			String action = request.getHeaders().get(ACTION);
+			
 			switch (action.toLowerCase()) {
 			case UPDATE:
 				boolean updateResult = this.cacheUnitController.update(request.getBody());
@@ -58,7 +54,6 @@ public class HandleRequest<T> extends java.lang.Object implements Runnable
 				}else {
 					writer.println( "Don't exist in the memory");
 				}
-
 				break;
 			}
 			writer.flush();

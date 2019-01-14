@@ -1,8 +1,4 @@
 package com.hit.services;
-/*
- * Gets from HandleRequest an action and invokes the right method,
- * the method then sends the action to DM and performs it.
- * */
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
