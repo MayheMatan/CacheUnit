@@ -1,11 +1,8 @@
 package com.hit.util;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -25,7 +22,7 @@ public class CLI extends java.lang.Object implements Runnable {
 	private Thread thread;
 	private String serverStatus = "on";
 	
-	public CLI(InputStream in, OutputStream out) {
+	public CLI(java.io.InputStream in, java.io.OutputStream out) {
 
 		scanner = new Scanner(in);
 		printWriter = new PrintWriter(out);
