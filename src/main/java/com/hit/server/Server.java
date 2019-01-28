@@ -45,7 +45,7 @@ public class Server extends java.lang.Object implements java.beans.PropertyChang
 				e1.printStackTrace();
 			}
 			try {
-				thread = new Thread(new HandleRequest<Request<String>>(socket, cacheUnitController));
+				thread = new Thread(new HandleRequest<Request<String>>(cacheUnitController, socket));
 				threadPoolExecutor.submit(thread); // counts the number of Exectutors
 			} catch (Exception e) {
 				e.printStackTrace();

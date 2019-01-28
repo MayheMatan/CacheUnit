@@ -1,81 +1,81 @@
 package com.hit.server;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.hit.dm.DataModel;
 import com.hit.services.CacheUnitController;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class HandleRequest<T> extends java.lang.Object implements Runnable
-{
-
-	private CacheUnitController<T> cacheUnitController;
-	private Socket socket;
+public class HandleRequest<T> implements Runnable {
+    private CacheUnitController<T> cacheUnitController;
+    private Socket socket;
     public static int countHandledRequests = 0;
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
-	public HandleRequest(Socket s, CacheUnitController<T> controller) {
-		this.cacheUnitController = controller;
-		this.socket = s;
-	}
+    public HandleRequest(CacheUnitController<T> cacheUnitController, Socket socket) {
+        this.cacheUnitController = cacheUnitController;
+        this.socket = socket;
+    }
 
-	@Override
-	public void run() {
-        ObjectInputStream inputStream = null;
-        ObjectOutputStream outputStream = null;
-
-		try {
+    @Override
+    public void run() {
+    	try {
             inputStream = new ObjectInputStream (socket.getInputStream ());
             outputStream = new ObjectOutputStream (socket.getOutputStream ());
-            System.out.println("waits for the request");
-            String req  = (String) inputStream.readObject ();
-            System.out.print(req);
-            System.out.println("got the request");
-		    Type ref = new TypeToken<Request<DataModel<T>[]>>() {}.getType();
-		    Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
-		    System.out.println("converted json");
-			String action = request.getHeaders().get("action");
-			System.out.println("The requested action is: " + action);
-			
-			switch (action.toLowerCase()) {
-			case "update":
-				System.out.println(request.getBody());
-				for(int i =0; i<request.getBody().length; i++)
-					System.out.println(request.getBody()[i]);
-				System.out.println(request.getBody().getClass());
-				boolean updateResult = this.cacheUnitController.update(request.getBody());
-				System.out.println("UPDATE before send: " + updateResult);
-				outputStream.writeObject("Update Result=" + updateResult);
-				System.out.println("UPDATE: " + updateResult);
-				break;
-			case "delete":
-				boolean deleteResult = this.cacheUnitController.delete(request.getBody());
-				outputStream.writeObject("Delete Result=" + deleteResult);
-				break;
-			case "get":
-				DataModel<T>[] dms = this.cacheUnitController.get(request.getBody());
-				if (dms != null) {
-					outputStream.writeObject(dms.toString());
-				}else {
-					outputStream.writeObject( "Don't exist in the memory");
-				}
-				break;
-			
-			default:
-				System.out.println("SERVER CANT UNDERSTAND");
-				outputStream.writeObject("FAILED");
-				break;
-			}
-			outputStream.flush ();
-			outputStream.close ();
-            inputStream.close ();
-			
+            String req = (String) inputStream.readObject();
+            System.out.println(req);
+            Type ref = new TypeToken<Request<DataModel<T>[]>>(){}.getType();
+            Request<DataModel<T>[]> request = new Gson().fromJson(req, ref);
+            String action = request.getHeaders().get("action");
+            String response;
+    
+            switch (action.toLowerCase()) {
+                case "update":
+                    countHandledRequests++;
+                    if (cacheUnitController.update(request.getBody())) {
+                    	outputStream.writeObject("Updated the requested content...");
+                    } else {
+                        outputStream.writeObject("Couldn't Update the requested content...");
+                    }
+
+                    break;
+                case "delete":
+                    countHandledRequests++;
+                    if (cacheUnitController.delete(request.getBody())) {
+                    	outputStream.writeObject("Deleted the requested content...");
+                    } else {
+                    	outputStream.writeObject("Couldn't Delete the requested content...");
+                    }
+
+                    break;
+                case "get":
+                    countHandledRequests++;
+                    DataModel<T>[] dms = cacheUnitController.get(request.getBody());
+                    if (dms != null) {
+                        response = "Retrieved the requested content...\n";
+                        for (DataModel<T> dm : dms) {
+                            response += dm.toString() + "\n";
+                        }
+
+                        response = response.replaceAll("\n", ".EndLine.");
+                        outputStream.writeObject(response);
+                    } else {
+                    	outputStream.writeObject("Couldn't Retrieve the requested content...");
+                    }
+
+                    break;
+                default:
+                	outputStream.writeObject("Unknown Command!");
+            }
+            outputStream.flush();
+            inputStream.close();
+            outputStream.close();
 		} catch (
 
 		IOException | ClassNotFoundException e) {
