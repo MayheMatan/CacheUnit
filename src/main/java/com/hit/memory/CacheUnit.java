@@ -17,9 +17,6 @@ public class CacheUnit<T> extends java.lang.Object {
 		this.dao = dao;
 	}
 	
-	// methods are synchronized for the situation if more then one client is trying
-	// to enter the same section simultaneously
-	
 	@SuppressWarnings("unchecked")
 	synchronized public DataModel<T>[] getDataModels(Long[] ids) { //
 		DataModel<T>[] models = new DataModel[ids.length];
