@@ -1,8 +1,11 @@
 package com.hit.dm;
 
-@SuppressWarnings("serial")
-public class DataModel <T> implements java.io.Serializable
+public class DataModel <T> extends java.lang.Object implements java.io.Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -129900713111766418L;
 	private Long dataModelId;
 	private T content;
 
@@ -25,7 +28,7 @@ public class DataModel <T> implements java.io.Serializable
 		this.content = content;
 	}
 
-	public void setDataModelId(java.lang.Long id)
+	public void setDataModelId(Long id)
 	{
 		this.dataModelId = id;
 	}

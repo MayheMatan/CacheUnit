@@ -8,10 +8,10 @@ public class Request<T> extends java.lang.Object implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 8553301636784820828L;
-	private java.util.Map<java.lang.String,java.lang.String> headers;
+	private java.util.Map<String,String> headers;
     private T body;
 
-    public Request(java.util.Map<java.lang.String,java.lang.String> headers, T body)
+    public Request(java.util.Map<String,String> headers, T body)
     {
         this.headers = headers;
         this.body = body;
@@ -22,7 +22,7 @@ public class Request<T> extends java.lang.Object implements Serializable
         return this.body;
     }
 
-    public java.util.Map<java.lang.String,java.lang.String> getHeaders()
+    public java.util.Map<String,String> getHeaders()
     {
         return this.headers;
     }
@@ -32,7 +32,7 @@ public class Request<T> extends java.lang.Object implements Serializable
         this.body = body;
     }
 
-    public void	setHeaders(java.util.Map<java.lang.String,java.lang.String> headers)
+    public void	setHeaders(java.util.Map<String,String> headers)
     {
         this.headers = headers;
     }
